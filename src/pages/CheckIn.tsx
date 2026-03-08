@@ -13,7 +13,7 @@ const PURPOSES = [
 ];
 
 const CheckIn = () => {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const [loadingId, setLoadingId] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);

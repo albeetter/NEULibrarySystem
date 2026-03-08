@@ -385,7 +385,7 @@ const AdminDashboard = () => {
                         dataKey="value"
                         stroke="none"
                       >
-                        {distributionData.map((entry, index) => (
+                        {distributionData.map((_, index) => (
                           <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                         ))}
                       </Pie>
