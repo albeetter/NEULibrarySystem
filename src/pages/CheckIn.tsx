@@ -57,8 +57,8 @@ const CheckIn = () => {
   };
 
   const handleDismiss = async () => {
-    await logout();
-    navigate('/');
+    // Optional: Remove `await logout();` if you want them to stay logged in
+    navigate('/user/dashboard');
   };
 
   // Extract first name for the greeting

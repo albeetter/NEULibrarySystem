@@ -1,5 +1,5 @@
 import { db } from '../config/firebase';
-import { collection, addDoc, getDocs, query, orderBy, onSnapshot, doc, updateDoc } from 'firebase/firestore';
+import { collection, addDoc, getDocs, query, orderBy, onSnapshot, doc, updateDoc, where, setDoc } from 'firebase/firestore';
 
 
 export const DatabaseService = {
@@ -78,6 +78,47 @@ export const DatabaseService = {
       isBlocked,
       blockReason: isBlocked ? blockReason : null // Clear reason if unblocking
     });
+  },
+
+  // 6. Listen to a specific user's visits in REAL-TIME
+  subscribeToUserVisits: (userId: string, callback: (visits: any[]) => void) => {
+    const visitsRef = collection(db, 'visits');
+    // We query by userId. 
+    const q = query(visitsRef, where('userId', '==', userId));
+    
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const userVisits = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      
+      // Sort client-side by newest first to avoid needing a Firestore composite index setup
+      userVisits.sort((a: any, b: any) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+      
+      callback(userVisits);
+    });
+
+    return unsubscribe;
+  },
+
+  // 7. Listen to Library Status (Overcrowded Alert)
+  subscribeToLibraryStatus: (callback: (status: any) => void) => {
+    const statusRef = doc(db, 'settings', 'libraryStatus');
+    const unsubscribe = onSnapshot(statusRef, (docSnap) => {
+      if (docSnap.exists()) {
+        callback(docSnap.data());
+      } else {
+        callback({ isOvercrowded: false }); // Default fallback
+      }
+    });
+    return unsubscribe;
+  },
+
+  // 8. Admin Override: Trigger Overcrowded Alert
+  updateLibraryStatus: async (isOvercrowded: boolean) => {
+    const statusRef = doc(db, 'settings', 'libraryStatus');
+    // setDoc with merge creates the document if it's missing!
+    await setDoc(statusRef, { isOvercrowded }, { merge: true }); 
   }
 
 

@@ -18,7 +18,7 @@ const LandingPage = () => {
       const user = await login();
       if (user.role === 'admin') navigate('/admin/dashboard');
       else if (!user.affiliation) navigate('/onboarding');
-      else navigate('/check-in');
+      else navigate('/user/dashboard'); // <--- Updated!
     } catch (err: any) {
       setError(err.message);
     } finally {
