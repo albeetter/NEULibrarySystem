@@ -2,16 +2,15 @@ import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
-// TODO: Replace this object with your actual config from the Firebase Console!
 const firebaseConfig = {
-  apiKey: "AIzaSyALJRIXGOSNG9Ovtuy7flSFOhOWCXs7Bek",
-  authDomain: "neu-library-check-in.firebaseapp.com",
-  databaseURL: "https://neu-library-check-in-default-rtdb.firebaseio.com",
-  projectId: "neu-library-check-in",
-  storageBucket: "neu-library-check-in.firebasestorage.app",
-  messagingSenderId: "434495167129",
-  appId: "1:434495167129:web:23cebabdedf5831695f608",
-  measurementId: "G-3GB37RH4QW"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
 // Initialize Firebase
